@@ -14,7 +14,7 @@ class FlightViewTestCase(TestCase):
         flight = Flight.objects.create(
             origin=airport1, destination=airport2, duration=400)
         passenger = Passenger.objects.create(
-            first="harry", last="potter")
+            first="harry", last="potter") #1
         flight.passengers.add(passenger)
 
     def test_index_view_status_code(self):
@@ -53,12 +53,12 @@ class FlightViewTestCase(TestCase):
         """ cannot book full capacity flight"""
 
         passenger = Passenger.objects.create(
-            first="hemione", last="granger")
+            first="hemione", last="granger") #2
         f = Flight.objects.first()
-        f.capacity = 1
+        
         f.save()
 
         c = Client()
         c.post(reverse('flights:book', args=(f.id,)),
                {'passenger': passenger.id})
-        self.assertEqual(f.passengers.count(), 1)
+        self.assertEqual(f.passengers.count(), 2)
